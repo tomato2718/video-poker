@@ -1,8 +1,10 @@
+#[derive(Clone, PartialEq, Eq)]
 pub struct Card {
     pub suit: Suit,
     pub rank: Rank,
 }
 
+#[derive(Clone, PartialEq, Eq)]
 pub enum Suit {
     Heart,
     Spade,
@@ -23,6 +25,7 @@ impl Suit {
     }
 }
 
+#[derive(Clone, PartialEq, Eq)]
 pub enum Rank {
     Ace,
     Two,
