@@ -6,10 +6,6 @@ pub struct Deck {
 }
 
 impl Deck {
-    pub fn empty() -> Self {
-        Deck { deck: Vec::new() }
-    }
-
     pub fn default_52_cards() -> Self {
         Deck {
             deck: [Suit::Heart, Suit::Spade, Suit::Club, Suit::Diamond]
@@ -59,21 +55,11 @@ impl Deck {
         self.deck.push(card);
     }
 
-    pub fn push_and_shuffle(&mut self, card: Card) {
-        self.deck.push(card);
-        self.shuffle();
-    }
-
     pub fn draw(&mut self) -> Result<Card, &'static str> {
         match self.deck.pop() {
             Some(card) => Ok(card),
             None => Err("Deck is empty"),
         }
-    }
-
-    pub fn shuffle_and_draw(&mut self) -> Result<Card, &'static str> {
-        self.shuffle();
-        self.draw()
     }
 
     pub fn shuffle(&mut self) {
@@ -89,13 +75,6 @@ mod test {
         pub fn inner(&self) -> Vec<Card> {
             self.deck.clone()
         }
-    }
-
-    #[test]
-    fn empty_should_generate_empty_deck() {
-        let inner = Deck::empty().inner();
-
-        assert!(inner.is_empty());
     }
 
     #[test]
@@ -122,7 +101,7 @@ mod test {
 
     #[test]
     fn push_should_put_the_card_into_deck() {
-        let mut deck = Deck::empty();
+        let mut deck = Deck::default_52_cards();
         deck.push(Card {
             suit: Suit::Club,
             rank: Rank::Ace,
@@ -136,7 +115,7 @@ mod test {
 
     #[test]
     fn draw_should_return_the_topmost_card() {
-        let mut deck = Deck::empty();
+        let mut deck = Deck::default_52_cards();
         deck.push(Card {
             suit: Suit::Club,
             rank: Rank::Ace,
