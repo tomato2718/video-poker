@@ -4,6 +4,12 @@ pub struct Card {
     pub rank: Rank,
 }
 
+impl Card {
+    pub fn repr(&self) -> String {
+        format!("{}{}", self.suit.repr(), self.rank.repr())
+    }
+}
+
 #[derive(Clone, PartialEq, Eq)]
 pub enum Suit {
     Heart,
