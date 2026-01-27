@@ -82,13 +82,12 @@ impl Hand {
     }
 
     fn is_flush(cards: &[Card]) -> bool {
-        let suits: Vec<Suit> = cards
+        cards
             .iter()
             .filter(|card| card.suit != Suit::Joker)
-            .map(|card| card.suit.clone())
-            .collect();
-        let want = suits.first().unwrap();
-        suits.iter().all(|suit| suit == want)
+            .collect::<Vec<&Card>>()
+            .windows(2)
+            .all(|slice| slice[0].suit == slice[1].suit)
     }
 
     fn is_full_house(cards: &[Card]) -> bool {
