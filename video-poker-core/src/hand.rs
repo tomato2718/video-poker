@@ -11,7 +11,7 @@ pub enum Hand {
     Straight,
     ThreeOfAKind,
     TwoPair,
-    OnePair,
+    JacksOrBetter,
     None,
 }
 
@@ -43,14 +43,13 @@ impl Hand {
         } else if Hand::pairs(&entries) == 2 {
             Hand::TwoPair
         } else if entries[0]
-            .max(entries[9])
             .max(entries[10])
             .max(entries[11])
             .max(entries[12])
             + jokers
             == 2
         {
-            Hand::OnePair
+            Hand::JacksOrBetter
         } else {
             Hand::None
         }
@@ -777,7 +776,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::OnePair
+            Hand::JacksOrBetter
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -802,7 +801,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::OnePair
+            Hand::JacksOrBetter
         );
     }
 }
