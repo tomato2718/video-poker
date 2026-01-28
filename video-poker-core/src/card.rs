@@ -1,12 +1,14 @@
+use std::fmt::{Display, Formatter, Result};
+
 #[derive(Clone, PartialEq, Eq)]
 pub struct Card {
     pub suit: Suit,
     pub rank: Rank,
 }
 
-impl Card {
-    pub fn repr(&self) -> String {
-        format!("{}{}", self.suit.repr(), self.rank.repr())
+impl Display for Card {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(f, "{}{}", self.suit, self.rank)
     }
 }
 
@@ -19,15 +21,19 @@ pub enum Suit {
     Joker,
 }
 
-impl Suit {
-    pub fn repr(&self) -> &'static str {
-        match self {
-            Self::Heart => "♥",
-            Self::Spade => "♠",
-            Self::Club => "♣",
-            Self::Diamond => "♦",
-            Self::Joker => "★",
-        }
+impl Display for Suit {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Heart => "♥",
+                Self::Spade => "♠",
+                Self::Club => "♣",
+                Self::Diamond => "♦",
+                Self::Joker => "★",
+            }
+        )
     }
 }
 
@@ -66,22 +72,28 @@ impl Rank {
             Self::King => 13,
         }
     }
+}
 
-    pub fn repr(&self) -> &'static str {
-        match self {
-            Self::Ace => "A",
-            Self::Two => "2",
-            Self::Three => "3",
-            Self::Four => "4",
-            Self::Five => "5",
-            Self::Six => "6",
-            Self::Seven => "7",
-            Self::Eight => "8",
-            Self::Nine => "9",
-            Self::Ten => "10",
-            Self::Jack => "J",
-            Self::Queen => "Q",
-            Self::King => "K",
-        }
+impl Display for Rank {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Ace => "A",
+                Self::Two => "2",
+                Self::Three => "3",
+                Self::Four => "4",
+                Self::Five => "5",
+                Self::Six => "6",
+                Self::Seven => "7",
+                Self::Eight => "8",
+                Self::Nine => "9",
+                Self::Ten => "10",
+                Self::Jack => "J",
+                Self::Queen => "Q",
+                Self::King => "K",
+            }
+        )
     }
 }
