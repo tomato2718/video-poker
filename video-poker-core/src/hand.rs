@@ -1,4 +1,5 @@
 use crate::card::{Card, Rank, Suit};
+use std::fmt::{Display, Formatter, Result};
 
 #[derive(Debug, PartialEq)]
 pub enum Hand {
@@ -132,6 +133,28 @@ impl Hand {
 
     fn pairs(card_entries: &[u8; 13]) -> usize {
         card_entries.iter().filter(|count| count == &&2).count()
+    }
+}
+
+impl Display for Hand {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::RoyalFlush => "Royal Flush",
+                Self::StraightFlush => "Straight Flush",
+                Self::FiveOfAKind => "Five of a kind",
+                Self::FourOfAKind => "Four of a kind",
+                Self::FullHouse => "Full House",
+                Self::Flush => "Flush",
+                Self::Straight => "Straight",
+                Self::ThreeOfAKind => "Three Of a kind",
+                Self::TwoPair => "Two pair",
+                Self::JacksOrBetter => "Jacks or Better",
+                Self::None => "All Other",
+            }
+        )
     }
 }
 
