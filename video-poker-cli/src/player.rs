@@ -1,5 +1,5 @@
 use dialoguer::MultiSelect;
-use video_poker_core::{Card, Player};
+use video_poker_core::{Card, video_poker};
 
 pub struct CliPlayer {
     cards: Vec<Card>,
@@ -18,7 +18,7 @@ impl CliPlayer {
     }
 }
 
-impl Player for CliPlayer {
+impl video_poker::Player for CliPlayer {
     fn draw(&mut self, cards: Vec<Card>) {
         self.cards.extend(cards);
         print!("Your hand is: ");

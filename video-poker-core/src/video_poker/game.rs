@@ -1,6 +1,6 @@
+use super::hand::Hand;
+use super::player::Player;
 use crate::deck::Deck;
-use crate::hand::Hand;
-use crate::player::Player;
 
 pub struct VideoPoker {
     deck: Deck,

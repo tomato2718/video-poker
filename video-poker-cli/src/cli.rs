@@ -1,5 +1,5 @@
 use crate::player::CliPlayer;
-use video_poker_core::{Rule, VideoPoker};
+use video_poker_core::video_poker::{Rule, VideoPoker};
 
 use dialoguer::Select;
 
