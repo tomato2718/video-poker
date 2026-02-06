@@ -16,25 +16,37 @@ impl VideoPoker {
 
     pub fn start(&mut self, player: &mut impl Player) -> Hand {
         self.deck.shuffle();
-        let mut players_deck: Vec<Card> = (0..5).map(|_| self.deck.draw().unwrap()).collect();
+        let mut players_deck = self.create_deck();
         player.show_cards(&players_deck);
 
         let indice_to_exchange = player.exchange(&players_deck);
-        indice_to_exchange
-            .iter()
-            .rev()
-            .for_each(|i| self.deck.push(players_deck.remove(*i)));
-        self.deck.shuffle();
-        indice_to_exchange
-            .into_iter()
-            .for_each(|i| players_deck.insert(i, self.deck.draw().unwrap()));
+        self.exchange_cards(&mut players_deck, indice_to_exchange);
         player.show_cards(&players_deck);
 
         let hand = Hand::from_cards(&players_deck);
+        self.push_back_to_deck(players_deck);
+        hand
+    }
+
+    fn create_deck(&mut self) -> Vec<Card> {
+        (0..5).map(|_| self.deck.draw().unwrap()).collect()
+    }
+
+    fn exchange_cards(&mut self, deck: &mut Vec<Card>, indice_to_exchange: Vec<usize>) {
+        indice_to_exchange
+            .iter()
+            .rev()
+            .for_each(|i| self.deck.push(deck.remove(*i)));
+        self.deck.shuffle();
+        indice_to_exchange
+            .into_iter()
+            .for_each(|i| deck.insert(i, self.deck.draw().unwrap()));
+    }
+
+    fn push_back_to_deck(&mut self, players_deck: Vec<Card>) {
         players_deck
             .into_iter()
             .for_each(|card| self.deck.push(card));
-        hand
     }
 }
 
