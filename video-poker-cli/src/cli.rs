@@ -42,7 +42,7 @@ impl CliGame {
 
             let bonus = self.bonus_game.start(&mut self.player);
             if let Some(round) = bonus.as_ref() {
-                println!("The bonus is x{}", 2_usize.pow(*round as u32 - 1));
+                println!("The bonus is x{}", 2_usize.pow(*round as u32));
                 press_any_to_continue();
             } else {
                 println!("You've lost the game.");

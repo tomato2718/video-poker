@@ -22,7 +22,7 @@ impl ScoreBoard {
     pub fn prize(&self, base: usize, hand: &Hand, bonus_rounds: Option<usize>) -> usize {
         base * self.rate.by_hand(hand)
             * bonus_rounds
-                .map(|r| self.bonus_base.pow(r as u32 - 1))
+                .map(|r| self.bonus_base.pow(r as u32))
                 .unwrap_or(1)
     }
 

@@ -36,10 +36,7 @@ impl video_poker::Player for CliPlayer {
 impl bonus_game::Player for CliPlayer {
     fn new_round(&self, current_round: usize) -> bool {
         clear_screen();
-        println!(
-            "Current bonus is x{}",
-            2_usize.pow(current_round as u32 - 1)
-        );
+        println!("Current bonus is x{}", 2_usize.pow(current_round as u32));
         Select::new()
             .with_prompt("Start a Bonus game?")
             .items(vec!["Yes", "No"])

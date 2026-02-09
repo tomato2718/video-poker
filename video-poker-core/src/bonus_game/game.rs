@@ -14,7 +14,7 @@ impl BonusGame {
     }
 
     pub fn start(&mut self, player: &mut impl Player) -> Option<usize> {
-        let mut current_round = 1;
+        let mut current_round = 0;
         while player.new_round(current_round) {
             self.deck.shuffle();
             let card = self.deck.draw().unwrap();
