@@ -1,5 +1,5 @@
-use video_poker_cli::start;
+use video_poker_cli::CliGame;
 
 fn main() {
-    start();
+    CliGame::default().start();
 }
