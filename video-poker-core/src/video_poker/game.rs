@@ -14,7 +14,7 @@ impl VideoPoker {
         }
     }
 
-    pub fn start(&mut self, player: &mut impl Player) -> Hand {
+    pub fn start(&mut self, player: &mut impl Player) -> Option<Hand> {
         self.deck.shuffle();
         let mut players_deck = self.create_deck();
         player.show_cards(&players_deck);

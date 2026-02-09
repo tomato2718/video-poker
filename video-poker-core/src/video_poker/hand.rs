@@ -13,11 +13,10 @@ pub enum Hand {
     ThreeOfAKind,
     TwoPair,
     JacksOrBetter,
-    None,
 }
 
 impl Hand {
-    pub fn from_cards(cards: &[Card]) -> Self {
+    pub fn from_cards(cards: &[Card]) -> Option<Self> {
         let is_royals = Hand::is_royals(cards);
         let is_straight = Hand::is_straight(cards);
         let is_flush = Hand::is_flush(cards);
@@ -26,23 +25,23 @@ impl Hand {
         let entries = Hand::count(cards);
 
         if is_royals && is_flush {
-            Hand::RoyalFlush
+            Some(Hand::RoyalFlush)
         } else if is_flush && is_straight {
-            Hand::StraightFlush
+            Some(Hand::StraightFlush)
         } else if same_ranks + jokers == 5 {
-            Hand::FiveOfAKind
+            Some(Hand::FiveOfAKind)
         } else if same_ranks + jokers == 4 {
-            Hand::FourOfAKind
+            Some(Hand::FourOfAKind)
         } else if Hand::is_full_house(cards) {
-            Hand::FullHouse
+            Some(Hand::FullHouse)
         } else if is_flush {
-            Hand::Flush
+            Some(Hand::Flush)
         } else if is_straight {
-            Hand::Straight
+            Some(Hand::Straight)
         } else if same_ranks + jokers == 3 {
-            Hand::ThreeOfAKind
+            Some(Hand::ThreeOfAKind)
         } else if Hand::pairs(&entries) == 2 {
-            Hand::TwoPair
+            Some(Hand::TwoPair)
         } else if entries[0]
             .max(entries[10])
             .max(entries[11])
@@ -50,9 +49,9 @@ impl Hand {
             + jokers
             == 2
         {
-            Hand::JacksOrBetter
+            Some(Hand::JacksOrBetter)
         } else {
-            Hand::None
+            None
         }
     }
 
@@ -152,7 +151,6 @@ impl Display for Hand {
                 Self::ThreeOfAKind => "Three Of a kind",
                 Self::TwoPair => "Two pair",
                 Self::JacksOrBetter => "Jacks or Better",
-                Self::None => "All Other",
             }
         )
     }
@@ -188,7 +186,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::RoyalFlush
+            Some(Hand::RoyalFlush)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -213,7 +211,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::RoyalFlush
+            Some(Hand::RoyalFlush)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -238,7 +236,7 @@ mod test {
                     suit: Suit::Joker,
                 },
             ]),
-            Hand::RoyalFlush
+            Some(Hand::RoyalFlush)
         );
     }
 
@@ -267,7 +265,7 @@ mod test {
                     suit: Suit::Heart
                 },
             ]),
-            Hand::StraightFlush
+            Some(Hand::StraightFlush)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -292,7 +290,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::StraightFlush
+            Some(Hand::StraightFlush)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -317,7 +315,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::StraightFlush
+            Some(Hand::StraightFlush)
         );
     }
 
@@ -346,7 +344,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::FiveOfAKind
+            Some(Hand::FiveOfAKind)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -371,7 +369,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::FiveOfAKind
+            Some(Hand::FiveOfAKind)
         );
     }
 
@@ -400,7 +398,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::FourOfAKind
+            Some(Hand::FourOfAKind)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -425,7 +423,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::FourOfAKind
+            Some(Hand::FourOfAKind)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -450,7 +448,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::FourOfAKind
+            Some(Hand::FourOfAKind)
         );
     }
 
@@ -479,7 +477,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::FullHouse
+            Some(Hand::FullHouse)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -504,7 +502,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::FullHouse
+            Some(Hand::FullHouse)
         );
     }
 
@@ -533,7 +531,7 @@ mod test {
                     suit: Suit::Diamond
                 },
             ]),
-            Hand::Flush
+            Some(Hand::Flush)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -558,7 +556,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::Flush
+            Some(Hand::Flush)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -583,7 +581,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::Flush
+            Some(Hand::Flush)
         );
     }
 
@@ -612,7 +610,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::Straight
+            Some(Hand::Straight)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -637,7 +635,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::Straight
+            Some(Hand::Straight)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -662,7 +660,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::Straight
+            Some(Hand::Straight)
         );
     }
 
@@ -691,7 +689,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::ThreeOfAKind
+            Some(Hand::ThreeOfAKind)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -716,7 +714,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::ThreeOfAKind
+            Some(Hand::ThreeOfAKind)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -741,7 +739,7 @@ mod test {
                     suit: Suit::Joker
                 },
             ]),
-            Hand::ThreeOfAKind
+            Some(Hand::ThreeOfAKind)
         );
     }
 
@@ -770,7 +768,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::TwoPair
+            Some(Hand::TwoPair)
         );
     }
 
@@ -799,7 +797,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::JacksOrBetter
+            Some(Hand::JacksOrBetter)
         );
         assert_eq!(
             Hand::from_cards(&vec![
@@ -824,7 +822,7 @@ mod test {
                     suit: Suit::Club
                 },
             ]),
-            Hand::JacksOrBetter
+            Some(Hand::JacksOrBetter)
         );
     }
 }
