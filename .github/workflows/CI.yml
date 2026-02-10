@@ -18,44 +18,33 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            target: aarch64-apple-darwin
+            default_name: video-poker-cli
             artifact_name: video-poker-cli-aarch64-apple-darwin
+            target: aarch64-apple-darwin
           - os: ubuntu-latest
+            default_name: video-poker-cli
+            artifact_name: video-poker-cli-x86_64-unknown-linux-gnu
             target: x86_64-unknown-linux-gnu
-            artifact_name: video-poker-cli-x86_64-linux-gnu
+          - os: windows-latest
+            default_name: video-poker-cli.exe
+            artifact_name: video-poker-cli-x86_64x86_64-pc-windows-msvc.exe
+            target: x86_64-pc-windows-msvc
     steps:
     - uses: actions/checkout@v4
     - name: Build
       run: cargo build -r -p video-poker-cli 
     - name: Rename
-      run: mv target/release/video-poker-cli target/release/video-poker-cli-${{ matrix.target }}
+      run: mv target/release/${{ matrix.default_name }} target/release/${{ matrix.artifact_name }}
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.target }}
-        path: target/release/video-poker-cli-${{ matrix.target }}
-  build-windows:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            artifact_name: video-poker-cli.exe
-    steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build -r -p video-poker-cli 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ matrix.target }}
-        path: target/release/video-poker-cli.exe
+        path: target/release/${{ matrix.artifact_name }}
   release:
     name: Release
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    needs: [build, build-windows]
+    needs: [build]
     permissions:
       id-token: write     
       contents: write     
