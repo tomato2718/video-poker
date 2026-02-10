@@ -27,7 +27,7 @@ jobs:
             target: x86_64-unknown-linux-gnu
           - os: windows-latest
             default_name: video-poker-cli.exe
-            artifact_name: video-poker-cli-x86_64x86_64-pc-windows-msvc.exe
+            artifact_name: video-poker-cli-x86_64-pc-windows-msvc.exe
             target: x86_64-pc-windows-msvc
     steps:
     - uses: actions/checkout@v4
