@@ -22,10 +22,10 @@ jobs:
             artifact_name: video-poker-cli.exe
           - os: macos-latest
             target: aarch64-apple-darwin
-            artifact_name: video-poker-cli
+            artifact_name: video-poker-cli-aarch64-apple-darwin
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            artifact_name: video-poker-cli
+            artifact_name: video-poker-cli-x86_64-linux-gnu
     steps:
     - uses: actions/checkout@v4
     - name: Build
