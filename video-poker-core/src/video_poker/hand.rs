@@ -1,4 +1,4 @@
-use crate::card::{Card, Rank, Suit};
+use crate::card::{Card, Suit};
 use std::fmt::{Display, Formatter, Result};
 
 #[derive(Debug, PartialEq)]
@@ -17,14 +17,14 @@ pub enum Hand {
 
 impl Hand {
     pub fn from_cards(cards: &[Card]) -> Option<Self> {
-        let is_royals = Hand::is_royals(cards);
+        let is_royal_straight = Hand::is_royal_straight(cards);
         let is_straight = Hand::is_straight(cards);
         let is_flush = Hand::is_flush(cards);
         let same_ranks = Hand::same_ranks(cards);
         let jokers = Hand::jokers(cards);
         let entries = Hand::count(cards);
 
-        if is_royals && is_flush {
+        if is_royal_straight && is_flush {
             Some(Hand::RoyalFlush)
         } else if is_flush && is_straight {
             Some(Hand::StraightFlush)
@@ -36,7 +36,7 @@ impl Hand {
             Some(Hand::FullHouse)
         } else if is_flush {
             Some(Hand::Flush)
-        } else if is_straight {
+        } else if is_straight || is_royal_straight {
             Some(Hand::Straight)
         } else if same_ranks + jokers == 3 {
             Some(Hand::ThreeOfAKind)
@@ -55,16 +55,17 @@ impl Hand {
         }
     }
 
-    fn is_royals(cards: &[Card]) -> bool {
-        cards
+    fn is_royal_straight(cards: &[Card]) -> bool {
+        let mut ranks: Vec<u8> = cards
             .iter()
             .filter(|card| card.suit != Suit::Joker)
-            .all(|card| {
-                matches!(
-                    card.rank,
-                    Rank::Ace | Rank::Ten | Rank::Jack | Rank::Queen | Rank::King
-                )
-            })
+            .map(|card| card.rank.value())
+            .collect();
+        ranks.sort();
+        ranks
+            .iter()
+            .all(|rank| matches!(rank, 1 | 10 | 11 | 12 | 13))
+            && ranks.windows(2).all(|s| s[0] != s[1])
     }
 
     fn is_straight(cards: &[Card]) -> bool {
@@ -657,6 +658,81 @@ mod test {
                 },
                 Card {
                     rank: Rank::Two,
+                    suit: Suit::Joker
+                },
+            ]),
+            Some(Hand::Straight)
+        );
+        assert_eq!(
+            Hand::from_cards(&vec![
+                Card {
+                    rank: Rank::Ten,
+                    suit: Suit::Club
+                },
+                Card {
+                    rank: Rank::Jack,
+                    suit: Suit::Heart
+                },
+                Card {
+                    rank: Rank::Queen,
+                    suit: Suit::Diamond
+                },
+                Card {
+                    rank: Rank::King,
+                    suit: Suit::Diamond
+                },
+                Card {
+                    rank: Rank::Ace,
+                    suit: Suit::Heart
+                },
+            ]),
+            Some(Hand::Straight)
+        );
+        assert_eq!(
+            Hand::from_cards(&vec![
+                Card {
+                    rank: Rank::Ten,
+                    suit: Suit::Club
+                },
+                Card {
+                    rank: Rank::Jack,
+                    suit: Suit::Heart
+                },
+                Card {
+                    rank: Rank::Queen,
+                    suit: Suit::Diamond
+                },
+                Card {
+                    rank: Rank::King,
+                    suit: Suit::Diamond
+                },
+                Card {
+                    rank: Rank::Ace,
+                    suit: Suit::Joker
+                },
+            ]),
+            Some(Hand::Straight)
+        );
+        assert_eq!(
+            Hand::from_cards(&vec![
+                Card {
+                    rank: Rank::Ten,
+                    suit: Suit::Club
+                },
+                Card {
+                    rank: Rank::Jack,
+                    suit: Suit::Heart
+                },
+                Card {
+                    rank: Rank::Queen,
+                    suit: Suit::Diamond
+                },
+                Card {
+                    rank: Rank::Two,
+                    suit: Suit::Joker
+                },
+                Card {
+                    rank: Rank::Ace,
                     suit: Suit::Joker
                 },
             ]),
